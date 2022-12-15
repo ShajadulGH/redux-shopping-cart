@@ -3,9 +3,8 @@ import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 import { useSelector } from "react-redux";
 function App() {
-  const toggle = useSelector((state) => state.toggle);
+  const toggle = useSelector((state) => state.toggle.toggle);
   console.log(toggle);
-
   return (
     <Layout>
       {toggle && <Cart />}
