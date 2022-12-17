@@ -11,19 +11,24 @@ let dontFetchOnFirstLoad = true;
 function App() {
   const toggle = useSelector((state) => state.toggle.toggle);
   const cart = useSelector((state) => state.cart);
+  const change = useSelector((state) => state.cart.change);
   console.log(cart);
   const notification = useSelector((state) => state.notification.notification);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(cartGetAction());
   }, [dispatch]);
+
   useEffect(() => {
     if (dontFetchOnFirstLoad) {
       dontFetchOnFirstLoad = false;
       return;
     }
-    dispatch(cartSendAction(cart));
-  }, [cart, dispatch]);
+
+    if (change) {
+      dispatch(cartSendAction(cart));
+    }
+  }, [cart, dispatch, change]);
   return (
     <Fragment>
       {notification && (
