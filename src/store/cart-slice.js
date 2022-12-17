@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { notificationActions } from "./notification";
 const cartslice = createSlice({
   name: "Cart",
   initialState: {
@@ -7,6 +6,10 @@ const cartslice = createSlice({
     totalAmount: 0,
   },
   reducers: {
+    replace(state, action) {
+      state.items = action.payload.items;
+      state.totalAmount = action.payload.totalAmount;
+    },
     addToCart(state, action) {
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
@@ -39,45 +42,6 @@ const cartslice = createSlice({
     },
   },
 });
-export const customActionCreator = (cart) => {
-  return (dispatch) => {
-    const sentCart = async () => {
-      dispatch(
-        notificationActions.notification({
-          status: "",
-          title: "Cart Sending...",
-          message: "Sending the cart!",
-        })
-      );
-      const response = await fetch(
-        "https://redux-shopping-cart-d9ca0-default-rtdb.firebaseio.com/cart.json",
-        {
-          method: "PUT",
-          body: JSON.stringify({ cart }),
-        }
-      );
-      if (response.ok) {
-        dispatch(
-          notificationActions.notification({
-            status: "success",
-            title: "Cart Sent",
-            message: "Successfully sent cart!",
-          })
-        );
-      }
-      const data = response.json();
-      console.log(data);
-    };
-    sentCart().catch((error) => {
-      dispatch(
-        notificationActions.notification({
-          status: "error",
-          title: "Cart Sending failed!!",
-          message: "Failed to send the cart!",
-        })
-      );
-    });
-  };
-};
+
 export const cartActions = cartslice.actions;
 export default cartslice.reducer;
